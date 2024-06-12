@@ -1,0 +1,62 @@
+<!DOCTYPE html> <!-- Declaration defines this document as HTML5 -->
+<html lang="en"> <!-- Opens an HTML document, setting the language to English -->
+<head>
+    <meta charset="UTF-8"> <!-- Specifies the character encoding for the HTML document to UTF-8 -->
+    <title>Todo App</title> <!-- Sets the title of the document, which appears in the browser tab -->
+</head>
+<body>
+    <h2>Register</h2> <!-- Heading for the registration section -->
+    <form onsubmit="register(); return false;"> <!-- Registration form that prevents default submit behavior to handle submission via JavaScript -->
+        Username: <input type="text" id="register-username"><br> <!-- Text field for entering a username -->
+        Password: <input type="password" id="register-password"><br> <!-- Password field for entering a password, input characters are obscured -->
+        <button type="submit">Register</button> <!-- Button to submit the form -->
+    </form>
+
+    <h2>Login</h2> <!-- Heading for the login section -->
+    <form onsubmit="login(); return false;"> <!-- Login form with onsubmit event to prevent default behavior and call JavaScript function -->
+        Username: <input type="text" id="login-username"><br> <!-- Text field for entering username -->
+        Password: <input type="password" id="login-password"><br> <!-- Password field for entering password -->
+        <button type="submit">Login</button> <!-- Button to submit the form -->
+    </form>
+
+    <script>
+    // Asynchronous function to handle user registration
+    async function register() {
+        // Retrieve username and password from the form inputs
+        const username = document.getElementById('register-username').value;
+        const password = document.getElementById('register-password').value;
+        // Make an HTTP POST request to the '/register' endpoint
+        const response = await fetch('/register', {
+            method: 'POST', // Specifies the HTTP method
+            headers: { // Set the headers for the request
+                'Content-Type': 'application/json' // Indicates that the body format is JSON
+            },
+            body: JSON.stringify({ username, password }) // Convert username and password into a JSON string for the request body
+        });
+        // Check if the HTTP response status indicates success
+        if (response.ok) {
+            alert('Registration successful, please log in.'); // Alert the user of successful registration
+        } else {
+            const message = await response.text(); // Retrieve the error message from the response
+            alert(message); // Display the error message
+        }
+    }
+
+    // Asynchronous function to handle user login
+    async function login() {
+        // Retrieve username and password from the login form inputs
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+        // Make an HTTP POST request to the '/login' endpoint
+        const response = await fetch('/login', {
+            method: 'POST', // Specifies the HTTP method
+            headers: { // Set the headers for the request
+                'Content-Type': 'application/json' // Indicates that the body format is JSON
+            },
+            body: JSON.stringify({ username, password }) // Convert username and password into a JSON string for the request body
+        });
+        alert(await response.text()); // Display the response text as an alert
+    }
+    </script>
+</body>
+</html>
